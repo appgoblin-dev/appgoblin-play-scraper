@@ -1,12 +1,9 @@
-import ssl
 import time
 from typing import Union
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
 from google_play_scraper.exceptions import ExtraHTTPError, NotFoundError
-
-ssl._create_default_https_context = ssl._create_unverified_context
 
 MAX_RETRIES = 3
 RATE_LIMIT_DELAY = 5

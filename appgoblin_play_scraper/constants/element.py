@@ -223,9 +223,9 @@ class ElementSpecs:
         "updated": ElementSpec(
             5,
             [1, 2, 145, 0, 1, 0],
-            lambda ts: ts * 1000 if ts else None,
+            lambda ts: ts if ts else None,
             fallback_value=ElementSpec(
-                5, [1, 2, -1, "146", 0, 1, 0], lambda ts: ts * 1000 if ts else None
+                5, [1, 2, -1, "146", 0, 1, 0], lambda ts: ts if ts else None
             ),
         ),
         "version": ElementSpec(

@@ -1,6 +1,6 @@
 [project]
 name = "appgoblin-play-scraper"
-version = "0.0.2"
+version = "0.0.3"
 description = "Google-Play-Scraper provides APIs to easily crawl the Google Play Store for Python without any external dependencies. Originally forked from JoMingyu/google-play-scraper"
 authors = [
     { name = "James O'Claire" },
@@ -38,8 +38,8 @@ dev = [
     "ruff>=0.3.0",
 ]
 
-[tool.setuptools]
-packages = ["appgoblin_play_scraper"]
+[tool.setuptools.packages.find]
+include = ["appgoblin_play_scraper*"]
 
 [build-system]
 requires = ["setuptools>=69.0", "wheel"]

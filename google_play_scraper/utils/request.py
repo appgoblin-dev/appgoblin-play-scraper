@@ -42,4 +42,12 @@ def post(url: str, data: Union[str, bytes], headers: dict) -> str:
 
 
 def get(url: str, timeout: int | None = None) -> str:
-    return _urlopen(url, timeout)
+    return _urlopen(
+        Request(
+            url,
+            headers={
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+            },
+        ),
+        timeout,
+    )

@@ -68,6 +68,30 @@ def get_categories(s):
     return categories
 
 
+def normalize_android_version(android_version_text):
+    if not android_version_text:
+        return "VARY"
+
+    number = android_version_text.split(" ")[0]
+    try:
+        float(number)
+        return number
+    except ValueError:
+        return "VARY"
+
+
+def extract_comments(source):
+    for ds_num in [8, 9]:
+        try:
+            ds_key = f"ds:{ds_num}"
+            if ds_key in source:
+                comments_data = source[ds_key][0]
+                return [item[4] for item in comments_data][:5]
+        except (KeyError, IndexError, TypeError):
+            continue
+    return []
+
+
 class ElementSpecs:
 
     Detail = {
@@ -89,6 +113,7 @@ class ElementSpecs:
         "minInstalls": ElementSpec(5, [1, 2, 13, 1]),
         "realInstalls": ElementSpec(5, [1, 2, 13, 2]),
         "score": ElementSpec(5, [1, 2, 51, 0, 1]),
+        "scoreText": ElementSpec(5, [1, 2, 51, 0, 0]),
         "ratings": ElementSpec(5, [1, 2, 51, 2, 1]),
         "reviews": ElementSpec(5, [1, 2, 51, 3, 1]),
         "histogram": ElementSpec(
@@ -100,7 +125,9 @@ class ElementSpecs:
                 container[3][1],
                 container[4][1],
                 container[5][1],
-            ],
+            ]
+            if container
+            else [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
         ),
         "price": ElementSpec(
@@ -111,69 +138,113 @@ class ElementSpecs:
         "sale": ElementSpec(4, [0, 2, 0, 0, 0, 14, 0, 0], bool, False),
         "saleTime": ElementSpec(4, [0, 2, 0, 0, 0, 14, 0, 0]),
         "originalPrice": ElementSpec(
-            3, [0, 2, 0, 0, 0, 1, 1, 0], lambda price: (price / 1000000) or 0
+            5,
+            [1, 2, 57, 0, 0, 0, 0, 1, 1, 0],
+            lambda price: (price / 1000000) if price else None,
         ),
         "saleText": ElementSpec(4, [0, 2, 0, 0, 0, 14, 1]),
-        "offersIAP": ElementSpec(5, [1, 2, 19, 0], bool, False),
+        "discountEndDate": ElementSpec(5, [1, 2, 57, 0, 0, 0, 0, 14, 1]),
+        "priceText": ElementSpec(
+            5, [1, 2, 57, 0, 0, 0, 0, 1, 0, 2], lambda s: s or "Free"
+        ),
+        "available": ElementSpec(5, [1, 2, 18, 0], bool),
+        "offersIAP": ElementSpec(5, [1, 2, 19, 0], bool),
         "inAppProductPrice": ElementSpec(5, [1, 2, 19, 0]),
-        # "size": ElementSpec(8, [0]),
-        # "androidVersion": ElementSpec(5, [1, 2, 140, 1, 1, 0, 0, 1], lambda s: s.split()[0]),
-        # "androidVersionText": ElementSpec(5, [1, 2, 140, 1, 1, 0, 0, 1]),
+        "IAPRange": ElementSpec(5, [1, 2, 19, 0]),
+        "androidVersion": ElementSpec(
+            5,
+            [1, 2, 140, 1, 1, 0, 0, 1],
+            normalize_android_version,
+            fallback_value=ElementSpec(
+                5, [1, 2, -1, "141", 1, 1, 0, 0, 1], normalize_android_version
+            ),
+        ),
+        "androidVersionText": ElementSpec(
+            5,
+            [1, 2, 140, 1, 1, 0, 0, 1],
+            lambda s: s or "Varies with device",
+            fallback_value=ElementSpec(
+                5, [1, 2, -1, "141", 1, 1, 0, 0, 1], lambda s: s or "Varies with device"
+            ),
+        ),
+        "androidMaxVersion": ElementSpec(
+            5,
+            [1, 2, 140, 1, 1, 0, 1, 1],
+            normalize_android_version,
+            fallback_value=ElementSpec(
+                5, [1, 2, -1, "141", 1, 1, 0, 1, 1], normalize_android_version
+            ),
+        ),
         "developer": ElementSpec(5, [1, 2, 68, 0]),
-        "developerId": ElementSpec(5, [1, 2, 68, 1, 4, 2], lambda s: s.split("id=")[1]),
+        "developerId": ElementSpec(
+            5, [1, 2, 68, 1, 4, 2], lambda s: s.split("id=")[1]
+        ),
         "developerEmail": ElementSpec(5, [1, 2, 69, 1, 0]),
         "developerWebsite": ElementSpec(5, [1, 2, 69, 0, 5, 2]),
         "developerAddress": ElementSpec(5, [1, 2, 69, 2, 0]),
+        "developerLegalName": ElementSpec(5, [1, 2, 69, 4, 0]),
+        "developerLegalEmail": ElementSpec(5, [1, 2, 69, 4, 1, 0]),
+        "developerLegalAddress": ElementSpec(
+            5,
+            [1, 2, 69],
+            lambda s: (nested_lookup(s, [4, 2, 0]) or "").replace("\n", ", "),
+        ),
+        "developerLegalPhoneNumber": ElementSpec(5, [1, 2, 69, 4, 3]),
         "privacyPolicy": ElementSpec(5, [1, 2, 99, 0, 5, 2]),
-        # "developerInternalID": ElementSpec(5, [0, 12, 5, 0, 0]),
+        "developerInternalID": ElementSpec(
+            5, [1, 2, 68, 1, 4, 2], lambda s: s.split("id=")[1]
+        ),
         "genre": ElementSpec(5, [1, 2, 79, 0, 0, 0]),
         "genreId": ElementSpec(5, [1, 2, 79, 0, 0, 2]),
         "categories": ElementSpec(5, [1, 2], get_categories, []),
         "icon": ElementSpec(5, [1, 2, 95, 0, 3, 2]),
         "headerImage": ElementSpec(5, [1, 2, 96, 0, 3, 2]),
         "screenshots": ElementSpec(
-            5, [1, 2, 78, 0], lambda container: [item[3][2] for item in container], []
+            5,
+            [1, 2, 78, 0],
+            lambda container: [item[3][2] for item in container] if container else [],
+            [],
         ),
         "video": ElementSpec(5, [1, 2, 100, 0, 0, 3, 2]),
         "videoImage": ElementSpec(5, [1, 2, 100, 1, 0, 3, 2]),
+        "previewVideo": ElementSpec(5, [1, 2, 100, 1, 2, 0, 2]),
         "contentRating": ElementSpec(5, [1, 2, 9, 0]),
         "contentRatingDescription": ElementSpec(5, [1, 2, 9, 2, 1]),
         "adSupported": ElementSpec(5, [1, 2, 48], bool),
         "containsAds": ElementSpec(5, [1, 2, 48], bool, False),
         "released": ElementSpec(5, [1, 2, 10, 0]),
-        "lastUpdatedOn": ElementSpec(5, [1, 2, 145, 0, 0]),
-        "updated": ElementSpec(5, [1, 2, 145, 0, 1, 0]),
+        "lastUpdatedOn": ElementSpec(
+            5,
+            [1, 2, 145, 0, 0],
+            fallback_value=ElementSpec(5, [1, 2, -1, "146", 0, 0]),
+        ),
+        "updated": ElementSpec(
+            5,
+            [1, 2, 145, 0, 1, 0],
+            lambda ts: ts * 1000 if ts else None,
+            fallback_value=ElementSpec(
+                5, [1, 2, -1, "146", 0, 1, 0], lambda ts: ts * 1000 if ts else None
+            ),
+        ),
         "version": ElementSpec(
-            5, [1, 2, 140, 0, 0, 0], fallback_value="Varies with device"
+            5,
+            [1, 2, 140, 0, 0, 0],
+            lambda s: s or "VARY",
+            fallback_value=ElementSpec(
+                5, [1, 2, -1, "141", 0, 0, 0], lambda s: s or "VARY"
+            ),
         ),
-        # "recentChanges": ElementSpec(5, [1, 2, 144, 1, 1], unescape_text),
-        # "recentChangesHTML": ElementSpec(5, [1, 2, 144, 1, 1]),
-        "comments": ElementSpec(
-            8, [0], lambda container: [item[4] for item in container], []
+        "recentChanges": ElementSpec(
+            5,
+            [1, 2, 144, 1, 1],
+            fallback_value=ElementSpec(5, [1, 2, -1, "145", 1, 1]),
         ),
-        # "editorsChoice": ElementSpec(5, [0, 12, 15, 0], bool, False),
-        # "similarApps": ElementSpec(
-        #     7,
-        #     [1, 1, 0, 0, 0],
-        #     lambda container: [container[i][12][0] for i in range(0, len(container))],
-        # ),
-        # "moreByDeveloper": [
-        #     ElementSpec(
-        #         9,
-        #         [0, 1, 0, 0, 0],
-        #         lambda container: [
-        #             container[i][12][0] for i in range(0, len(container))
-        #         ],
-        #     ),
-        #     ElementSpec(
-        #         9,
-        #         [0, 1, 0, 6, 0],
-        #         lambda container: [
-        #             container[i][12][0] for i in range(0, len(container))
-        #         ],
-        #     ),
-        # ],
+        "comments": ElementSpec(None, [], extract_comments, []),
+        "preregister": ElementSpec(5, [1, 2, 18, 0], lambda s: s == 1),
+        "earlyAccessEnabled": ElementSpec(5, [1, 2, 18, 2], lambda s: isinstance(s, str)),
+        "isAvailableInPlayPass": ElementSpec(5, [1, 2, 62], bool),
     }
+
     Review = {
         "reviewId": ElementSpec(None, [0]),
         "userName": ElementSpec(None, [1, 0]),

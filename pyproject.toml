@@ -1,9 +1,8 @@
 [project]
-name = "google-play-scraper"
-version = "1.2.7"
-description = "Google-Play-Scraper provides APIs to easily crawl the Google Play Store for Python without any external dependencies!"
+name = "appgoblin-play-scraper"
+version = "0.0.1"
+description = "Google-Play-Scraper provides APIs to easily crawl the Google Play Store for Python without any external dependencies. Originally forked from JoMingyu/google-play-scraper"
 authors = [
-    { name = "JoMingyu", email = "mingyu.planb@gmail.com" },
     { name = "James O'Claire" },
 ]
 license = "MIT"
@@ -15,18 +14,17 @@ classifiers = [
     "Operating System :: Microsoft",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
     "Typing :: Typed",
 ]
 readme = "README.md"
-requires-python = ">=3.11,<4.0"
+requires-python = ">=3.12,<4.0"
 dependencies = []
 
 [project.urls]
-Repository = "https://github.com/ddxv/google-play-scraper"
+Repository = "https://github.com/appgoblin-dev/appgoblin-play-scraper"
 
 [project.optional-dependencies]
 dev = [

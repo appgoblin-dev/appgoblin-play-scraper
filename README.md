@@ -1,22 +1,21 @@
-# Google-Play-Scraper
+# AppGoblin's Google-Play-Scraper
 
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/python/black)
-[![PyPI](https://img.shields.io/pypi/v/google-play-scraper.svg)](https://pypi.org/project/google-play-scraper)
-[![downloads](https://img.shields.io/pypi/dm/google-play-scraper.svg)](https://pypistats.org/packages/google-play-scraper)
-[![versions](https://img.shields.io/pypi/pyversions/google-play-scraper.svg)](https://github.com/JoMingyu/google-play-scraper)
-[![scheduled e2e test](https://github.com/JoMingyu/google-play-scraper/actions/workflows/scheduled_e2e_test.yml/badge.svg)](https://github.com/JoMingyu/google-play-scraper/actions/workflows/scheduled_e2e_test.yml)
 
 Google-Play-Scraper provides APIs to easily crawl the Google Play Store for Python *without any external dependencies!*
 
 ## Related Projects
-### [google-play-scraper](https://github.com/facundoolano/google-play-scraper)
-> Node.js scraper to get data from Google Play
 
+### Active JS library: [google-play-scraper](https://github.com/facundoolano/google-play-scraper)
+> Node.js scraper to get data from Google Play
 I have referred a lot to the API design of this library.
+
+### Hard Forked from: [google-play-scraper](https://github.com/JoMingyu/google-play-scraper)
+
 
 ## Installation
 ```
-pip install google-play-scraper
+git clone
+pip install .
 ```
 
 ## Development
@@ -28,15 +27,6 @@ python -m pip install -e ".[dev]"
 pytest
 ```
 
-## Release (maintainers)
-```
-python -m black ./
-python -m build
-python -m twine upload dist/*
-```
-
-## Usage
-The country and language codes that can be included in the `lang` and `country` parameters described below depend on the [ISO 3166](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes) and [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) standards, respectively. Therefore, we recommend using an ISO database library such as [pycountry](https://github.com/flyingcircusio/pycountry).
 
 ### App Detail
 ```python
@@ -419,3 +409,4 @@ Result of `print(result)`:
 
 ## Changes
 Change logs are here : [CHANGELOG.md](CHANGELOG.md)
+

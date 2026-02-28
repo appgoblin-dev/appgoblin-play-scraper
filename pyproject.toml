@@ -1,6 +1,6 @@
 [project]
 name = "appgoblin-play-scraper"
-version = "0.0.3"
+version = "0.0.4"
 description = "Google-Play-Scraper provides APIs to easily crawl the Google Play Store for Python without any external dependencies. Originally forked from JoMingyu/google-play-scraper"
 authors = [
     { name = "James O'Claire" },

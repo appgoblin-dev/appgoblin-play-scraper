@@ -1,5 +1,4 @@
 import json
-from typing import Dict
 
 from google_play_scraper.constants.element import ElementSpecs
 from google_play_scraper.constants.regex import Regex
@@ -7,7 +6,7 @@ from google_play_scraper.constants.request import Formats
 from google_play_scraper.utils.request import post
 
 
-def permissions(app_id: str, lang: str = "en", country: str = "us") -> Dict[str, list]:
+def permissions(app_id: str, lang: str = "en", country: str = "us") -> dict[str, list]:
     dom = post(
         Formats.Permissions.build(lang=lang, country=country),
         Formats.Permissions.build_body(app_id),
@@ -27,8 +26,8 @@ def permissions(app_id: str, lang: str = "en", country: str = "us") -> Dict[str,
 
             for permission in permission_items:
                 if permission:
-                    result[
-                        ElementSpecs.PermissionType.extract_content(permission)
-                    ] = ElementSpecs.PermissionList.extract_content(permission)
+                    result[ElementSpecs.PermissionType.extract_content(permission)] = (
+                        ElementSpecs.PermissionList.extract_content(permission)
+                    )
 
     return result

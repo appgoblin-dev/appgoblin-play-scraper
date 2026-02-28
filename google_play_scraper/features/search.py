@@ -1,5 +1,4 @@
 import json
-from typing import Any, Dict, List
 from urllib.parse import quote
 
 from google_play_scraper.constants.element import ElementSpecs
@@ -11,7 +10,7 @@ from google_play_scraper.utils.request import get
 
 def search(
     query: str, n_hits: int = 30, lang: str = "en", country: str = "us"
-) -> List[Dict[str, Any]]:
+) -> list[dict]:
     if n_hits <= 0:
         return []
 

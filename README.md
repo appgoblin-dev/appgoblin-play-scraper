@@ -19,6 +19,22 @@ I have referred a lot to the API design of this library.
 pip install google-play-scraper
 ```
 
+## Development
+```
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -U pip
+python -m pip install -e ".[dev]"
+pytest
+```
+
+## Release (maintainers)
+```
+python -m black ./
+python -m build
+python -m twine upload dist/*
+```
+
 ## Usage
 The country and language codes that can be included in the `lang` and `country` parameters described below depend on the [ISO 3166](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes) and [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) standards, respectively. Therefore, we recommend using an ISO database library such as [pycountry](https://github.com/flyingcircusio/pycountry).
 

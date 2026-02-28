@@ -1,5 +1,4 @@
 import json
-from typing import Any, Dict
 
 from google_play_scraper.constants.element import ElementSpecs
 from google_play_scraper.constants.regex import Regex
@@ -10,7 +9,7 @@ from google_play_scraper.utils.request import get
 
 def app(
     app_id: str, lang: str = "en", country: str = "us", timeout: int | None = None
-) -> Dict[str, Any]:
+) -> dict:
     url = Formats.Detail.build(app_id=app_id, lang=lang, country=country)
 
     try:
@@ -21,7 +20,7 @@ def app(
     return parse_dom(dom=dom, app_id=app_id, url=url)
 
 
-def parse_dom(dom: str, app_id: str, url: str) -> Dict[str, Any]:
+def parse_dom(dom: str, app_id: str, url: str) -> dict:
     matches = Regex.SCRIPT.findall(dom)
 
     dataset = {}

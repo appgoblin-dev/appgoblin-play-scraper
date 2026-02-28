@@ -20,7 +20,7 @@ class TestReviewsAll(TestCase):
     def test_request_multiple_times(self):
         with patch(
             "google_play_scraper.features.reviews.reviews", wraps=reviews
-        ) as mock_reviews:
+        ) as _mock_reviews:
             result = reviews_all("co.kr.uaram.userdeliver_", lang="ko", country="kr")
 
         result_of_reviews, _ = reviews(

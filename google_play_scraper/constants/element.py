@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Callable, List, Optional
+from typing import Callable
 
 from google_play_scraper.utils import nested_lookup
 from google_play_scraper.utils.data_processors import unescape_text
@@ -8,17 +8,17 @@ from google_play_scraper.utils.data_processors import unescape_text
 class ElementSpec:
     def __init__(
         self,
-        ds_num: Optional[int],
-        data_map: List[int],
-        post_processor: Callable = None,
-        fallback_value: Any = None,
+        ds_num: int | None,
+        data_map: list[int],
+        post_processor: Callable | None = None,
+        fallback_value=None,
     ):
         self.ds_num = ds_num
         self.data_map = data_map
         self.post_processor = post_processor
         self.fallback_value = fallback_value
 
-    def extract_content(self, source: dict) -> Any:
+    def extract_content(self, source: dict):
         try:
             if self.ds_num is None:
                 result = nested_lookup(source, self.data_map)
@@ -29,7 +29,7 @@ class ElementSpec:
 
             if self.post_processor is not None:
                 result = self.post_processor(result)
-        except:
+        except Exception:
             if isinstance(self.fallback_value, ElementSpec):
                 result = self.fallback_value.extract_content(source)
             else:
@@ -38,7 +38,7 @@ class ElementSpec:
         return result
 
 
-def extract_categories(s, categories=None):
+def extract_categories(s, categories=None) -> list:
     # Init an empty list if first iteration
     if categories is None:
         categories = []
@@ -54,7 +54,7 @@ def extract_categories(s, categories=None):
     return categories
 
 
-def get_categories(s):
+def get_categories(s) -> list:
     categories = extract_categories(nested_lookup(s, [118]))
     if len(categories) == 0:
         # add genre and genreId like GP does when there're no categories available
@@ -68,7 +68,7 @@ def get_categories(s):
     return categories
 
 
-def normalize_android_version(android_version_text):
+def normalize_android_version(android_version_text) -> str:
     if not android_version_text:
         return "VARY"
 
@@ -80,7 +80,7 @@ def normalize_android_version(android_version_text):
         return "VARY"
 
 
-def extract_comments(source):
+def extract_comments(source) -> list:
     for ds_num in [8, 9]:
         try:
             ds_key = f"ds:{ds_num}"
@@ -93,7 +93,6 @@ def extract_comments(source):
 
 
 class ElementSpecs:
-
     Detail = {
         "title": ElementSpec(5, [1, 2, 0, 0]),
         "description": ElementSpec(
@@ -119,15 +118,17 @@ class ElementSpecs:
         "histogram": ElementSpec(
             5,
             [1, 2, 51, 1],
-            lambda container: [
-                container[1][1],
-                container[2][1],
-                container[3][1],
-                container[4][1],
-                container[5][1],
-            ]
-            if container
-            else [0, 0, 0, 0, 0],
+            lambda container: (
+                [
+                    container[1][1],
+                    container[2][1],
+                    container[3][1],
+                    container[4][1],
+                    container[5][1],
+                ]
+                if container
+                else [0, 0, 0, 0, 0]
+            ),
             [0, 0, 0, 0, 0],
         ),
         "price": ElementSpec(
@@ -176,9 +177,7 @@ class ElementSpecs:
             ),
         ),
         "developer": ElementSpec(5, [1, 2, 68, 0]),
-        "developerId": ElementSpec(
-            5, [1, 2, 68, 1, 4, 2], lambda s: s.split("id=")[1]
-        ),
+        "developerId": ElementSpec(5, [1, 2, 68, 1, 4, 2], lambda s: s.split("id=")[1]),
         "developerEmail": ElementSpec(5, [1, 2, 69, 1, 0]),
         "developerWebsite": ElementSpec(5, [1, 2, 69, 0, 5, 2]),
         "developerAddress": ElementSpec(5, [1, 2, 69, 2, 0]),
@@ -241,7 +240,9 @@ class ElementSpecs:
         ),
         "comments": ElementSpec(None, [], extract_comments, []),
         "preregister": ElementSpec(5, [1, 2, 18, 0], lambda s: s == 1),
-        "earlyAccessEnabled": ElementSpec(5, [1, 2, 18, 2], lambda s: isinstance(s, str)),
+        "earlyAccessEnabled": ElementSpec(
+            5, [1, 2, 18, 2], lambda s: isinstance(s, str)
+        ),
         "isAvailableInPlayPass": ElementSpec(5, [1, 2, 62], bool),
     }
 

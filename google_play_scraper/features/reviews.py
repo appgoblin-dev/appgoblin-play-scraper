@@ -1,6 +1,5 @@
 import json
 from time import sleep
-from typing import List, Optional, Tuple
 
 from google_play_scraper import Sort
 from google_play_scraper.constants.element import ElementSpecs
@@ -39,9 +38,9 @@ def _fetch_review_items(
     app_id: str,
     sort: int,
     count: int,
-    filter_score_with: Optional[int],
-    filter_device_with: Optional[int],
-    pagination_token: Optional[str],
+    filter_score_with: int | None,
+    filter_device_with: int | None,
+    pagination_token: str | None,
 ):
     dom = post(
         url,
@@ -58,7 +57,7 @@ def _fetch_review_items(
     match = json.loads(Regex.REVIEWS.findall(dom)[0])
     try:
         token = json.loads(match[0][2])[-2][-1]
-    except:
+    except Exception:
         token = None
 
     results = json.loads(match[0][2])
@@ -73,10 +72,10 @@ def reviews(
     country: str = "us",
     sort: Sort = Sort.NEWEST,
     count: int = 100,
-    filter_score_with: int = None,
-    filter_device_with: int = None,
-    continuation_token: _ContinuationToken = None,
-) -> Tuple[List[dict], _ContinuationToken]:
+    filter_score_with: int | None = None,
+    filter_device_with: int | None = None,
+    continuation_token: _ContinuationToken | None = None,
+) -> tuple[list[dict], _ContinuationToken]:
     sort = sort.value
 
     if continuation_token is not None:
@@ -161,7 +160,7 @@ def reviews_all(app_id: str, sleep_milliseconds: int = 0, **kwargs) -> list:
             app_id,
             count=MAX_COUNT_EACH_FETCH,
             continuation_token=continuation_token,
-            **kwargs
+            **kwargs,
         )
 
         result += _result

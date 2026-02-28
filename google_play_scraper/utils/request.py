@@ -1,5 +1,4 @@
 import time
-from typing import Union
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
@@ -23,7 +22,7 @@ def _urlopen(obj, timeout: int | None = None):
     return resp.read().decode("UTF-8")
 
 
-def post(url: str, data: Union[str, bytes], headers: dict) -> str:
+def post(url: str, data: str | bytes, headers: dict) -> str:
     last_exception = None
     rate_exceeded_count = 0
     for _ in range(MAX_RETRIES):

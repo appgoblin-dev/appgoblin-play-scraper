@@ -1,5 +1,5 @@
 import re
-from datetime import datetime, timedelta
+from datetime import datetime
 from unittest import TestCase
 from unittest.mock import patch
 from urllib.parse import urlparse

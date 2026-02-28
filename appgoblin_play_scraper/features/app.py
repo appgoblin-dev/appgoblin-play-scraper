@@ -38,11 +38,7 @@ def parse_dom(dom: str, app_id: str, url: str) -> dict:
     result = {}
 
     for k, spec in ElementSpecs.Detail.items():
-        content = spec.extract_content(dataset)
-        if content is None:
-            result[k] = spec.fallback_value
-        else:
-            result[k] = content
+        result[k] = spec.extract_content(dataset)
 
     result["appId"] = app_id
     result["url"] = url

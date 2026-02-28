@@ -19,6 +19,7 @@ class ElementSpec:
         self.fallback_value = fallback_value
 
     def extract_content(self, source: dict):
+        result = None
         try:
             if self.ds_num is None:
                 result = nested_lookup(source, self.data_map)
@@ -30,10 +31,12 @@ class ElementSpec:
             if self.post_processor is not None:
                 result = self.post_processor(result)
         except Exception:
+            result = None
+
+        if result is None and self.fallback_value is not None:
             if isinstance(self.fallback_value, ElementSpec):
-                result = self.fallback_value.extract_content(source)
-            else:
-                result = self.fallback_value
+                return self.fallback_value.extract_content(source)
+            return self.fallback_value
 
         return result
 

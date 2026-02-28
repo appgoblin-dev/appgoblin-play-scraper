@@ -4,8 +4,8 @@ from unittest import TestCase
 from unittest.mock import patch
 from urllib.parse import urlparse
 
-from google_play_scraper import Sort
-from google_play_scraper.features.reviews import (
+from appgoblin_play_scraper import Sort
+from appgoblin_play_scraper.features.reviews import (
     _ContinuationToken,
     _fetch_review_items,
     reviews,
@@ -184,7 +184,7 @@ class TestReviews(TestCase):
         self.assertEqual(3, continuation_token.filter_score_with)
 
         with patch(
-            "google_play_scraper.features.reviews._fetch_review_items",
+            "appgoblin_play_scraper.features.reviews._fetch_review_items",
             wraps=_fetch_review_items,
         ) as m:
             _ = reviews("com.mojang.minecraftpe", continuation_token=continuation_token)
@@ -202,7 +202,7 @@ class TestReviews(TestCase):
         """
 
         with patch(
-            "google_play_scraper.features.reviews._fetch_review_items",
+            "appgoblin_play_scraper.features.reviews._fetch_review_items",
             wraps=_fetch_review_items,
         ) as m:
             _ = reviews(

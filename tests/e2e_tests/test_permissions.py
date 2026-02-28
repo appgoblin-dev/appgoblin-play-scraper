@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from google_play_scraper.features.permissions import permissions
+from appgoblin_play_scraper.features.permissions import permissions
 
 
 class TestPermission(TestCase):

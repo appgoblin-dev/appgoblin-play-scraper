@@ -2,7 +2,7 @@ import time
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
-from google_play_scraper.exceptions import ExtraHTTPError, NotFoundError
+from appgoblin_play_scraper.exceptions import ExtraHTTPError, NotFoundError
 
 MAX_RETRIES = 3
 RATE_LIMIT_DELAY = 5

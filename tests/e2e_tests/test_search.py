@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from google_play_scraper.features.search import search
+from appgoblin_play_scraper.features.search import search
 
 
 class TestSearch(TestCase):

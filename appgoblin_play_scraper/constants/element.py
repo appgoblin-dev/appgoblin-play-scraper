@@ -1,8 +1,8 @@
 from datetime import datetime
 from typing import Callable
 
-from google_play_scraper.utils import nested_lookup
-from google_play_scraper.utils.data_processors import unescape_text
+from appgoblin_play_scraper.utils import nested_lookup
+from appgoblin_play_scraper.utils.data_processors import unescape_text
 
 
 class ElementSpec:

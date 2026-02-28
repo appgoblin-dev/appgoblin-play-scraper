@@ -1,11 +1,11 @@
 import json
 from urllib.parse import quote
 
-from google_play_scraper.constants.element import ElementSpecs
-from google_play_scraper.constants.regex import Regex
-from google_play_scraper.constants.request import Formats
-from google_play_scraper.exceptions import NotFoundError
-from google_play_scraper.utils.request import get
+from appgoblin_play_scraper.constants.element import ElementSpecs
+from appgoblin_play_scraper.constants.regex import Regex
+from appgoblin_play_scraper.constants.request import Formats
+from appgoblin_play_scraper.exceptions import NotFoundError
+from appgoblin_play_scraper.utils.request import get
 
 
 def search(

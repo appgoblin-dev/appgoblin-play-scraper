@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from google_play_scraper.features.app import app
+from appgoblin_play_scraper.features.app import app
 
 
 class TestApp(TestCase):

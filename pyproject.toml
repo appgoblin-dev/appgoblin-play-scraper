@@ -35,7 +35,7 @@ dev = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["google_play_scraper*"]
+include = ["appgoblin_play_scraper*"]
 
 [build-system]
 requires = ["setuptools>=69", "wheel"]

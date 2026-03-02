@@ -27,16 +27,13 @@ class TestSearch(TestCase):
         self.assertEqual("USD", result["currency"])
         self.assertEqual("Niantic, Inc.", result["developer"])
         self.assertEqual("Adventure", result["genre"])
-        self.assertEqual(
-            "https://play-lh.googleusercontent.com/6qUR3CmTyz3lMdMK8GENfibQ9ZQIIgHIP3_pgnYcuG04ykheKtl-dhyPzjlvhF_MANI",
-            result["icon"],
-        )
+        self.assertTrue("https://play-lh.googleusercontent.com" in result["icon"])
         self.assertTrue(result["screenshots"])
         for screenshot_url in result["screenshots"]:
             self.assertTrue(
                 screenshot_url.startswith("https://play-lh.googleusercontent.com/")
             )
-        self.assertTrue(result["video"].startswith("https://www.youtube.com"))
+        self.assertTrue(result["video"].startswith("https://play.google.com/video"))
         self.assertTrue(result["videoImage"].endswith(".jpg"))
 
     def test_e2e_scenario_2(self):

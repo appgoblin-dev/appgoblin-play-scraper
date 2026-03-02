@@ -20,6 +20,10 @@ class TestPermission(TestCase):
                 "Microphone": ["record audio"],
                 "Wi-Fi connection information": ["view Wi-Fi connections"],
                 "Contacts": ["find accounts on the device"],
+                "Location": [
+                    "approximate location (network-based)",
+                    "precise location (GPS and network-based)",
+                ],
                 "Camera": ["take pictures and videos"],
                 "Photos/Media/Files": [
                     "modify or delete the contents of your USB storage",
@@ -36,12 +40,17 @@ class TestPermission(TestCase):
                     "install shortcuts",
                     "pair with Bluetooth devices",
                     "prevent device from sleeping",
+                    "read Google service configuration",
                     "run at startup",
                     "send sticky broadcast",
                     "use accounts on the device",
                     "view network connections",
                 ],
-                "Uncategorized": ["receive data from Internet"],
+                "Uncategorized": [
+                    "read TV channel/program information",
+                    "receive data from Internet",
+                    "write TV channel/program information",
+                ],
             },
             result,
         )

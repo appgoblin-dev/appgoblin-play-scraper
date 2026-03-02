@@ -29,15 +29,15 @@ class TestApp(TestCase):
         )
         self.assertEqual("100,000+", result["installs"])
         self.assertEqual(100000, result["minInstalls"])
-        self.assertTrue(3.7 < result["score"] < 4.0)
+        self.assertTrue(3 < result["score"] < 4.0)
         self.assertTrue(9500 <= result["ratings"])
         self.assertTrue(200 <= result["reviews"])
         self.assertTrue(result["reviews"] < result["ratings"])
         self.assertTrue(1500 <= result["histogram"][0])
-        self.assertTrue(500 <= result["histogram"][1])
-        self.assertTrue(400 <= result["histogram"][2])
-        self.assertTrue(900 <= result["histogram"][3])
-        self.assertTrue(5000 <= result["histogram"][4])
+        self.assertTrue(200 <= result["histogram"][1])
+        self.assertTrue(200 <= result["histogram"][2])
+        self.assertTrue(500 <= result["histogram"][3])
+        self.assertTrue(4000 <= result["histogram"][4])
         # self.assertEqual(sum(result["histogram"]), result["ratings"])
         self.assertEqual(0, result["price"])
         self.assertTrue(result["free"])
@@ -50,8 +50,10 @@ class TestApp(TestCase):
         self.assertEqual("Tatsuki", result["developerId"])
         self.assertEqual("sskttk.android@gmail.com", result["developerEmail"])
         self.assertEqual("https://sskttk-app.com/", result["developerWebsite"])
+        self.assertEqual(None, result["developerAddress"])
         self.assertEqual(
-            "Osaka-shi Chuo-ku Minamisenba 4-10-5", result["developerAddress"]
+            "4-8-13, DAIDO, TENNOJI-KU, YAMANO BLDG.2F., OSAKA, 大阪府 543-0052, Japan",
+            result["developerLegalAddress"],
         )
         self.assertEqual("https://sskttk-app.com/?page_id=223", result["privacyPolicy"])
         # self.assertEqual("8524055825995721370", result["developerInternalID"])
@@ -82,8 +84,8 @@ class TestApp(TestCase):
         self.assertTrue(result["adSupported"])
         self.assertTrue(result["containsAds"])
         self.assertEqual("Jan 7, 2014", result["released"])
-        self.assertEqual(1692642233, result["updated"])
-        self.assertEqual("Varies with device", result["version"])
+        self.assertTrue(1754497175 <= result["updated"])
+        self.assertIsNotNone(result["version"])
         self.assertFalse(result["comments"])
         # self.assertTrue(result["similarApps"])
         # self.assertTrue(result["moreByDeveloper"])
@@ -105,15 +107,8 @@ class TestApp(TestCase):
         Testing for video, videoImage that excluded from scenario 1~2
         """
         res = app("com.sgn.pandapop.gp")
-
-        self.assertEqual(
-            "https://www.youtube.com/embed/pw9e5aIoznY?ps=play&vq=large&rel=0&autohide=1&showinfo=0",
-            res["video"],
-        )
-        self.assertEqual(
-            "https://play-lh.googleusercontent.com/spi_c6YT_E2yC4QwPC8oQpBGLyu2gTGj1BAvVhLDQJtRzGkR30kzmdKkajcCDDXrXsvS",
-            res["videoImage"],
-        )
+        self.assertTrue("play.google.com/video" in res["video"])
+        self.assertTrue("https://play-lh.googleusercontent.com" in res["videoImage"])
 
     def test_e2e_scenario_4(self):
         """

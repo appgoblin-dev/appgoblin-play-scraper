@@ -61,6 +61,7 @@ class TestPermission(TestCase):
         self.assertDictEqual(
             {
                 "Other": [
+                    "Google Play license check",
                     "control vibration",
                     "full network access",
                     "prevent device from sleeping",

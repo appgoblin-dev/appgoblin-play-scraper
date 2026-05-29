@@ -2,7 +2,10 @@ from datetime import datetime
 from typing import Callable
 
 from appgoblin_play_scraper.utils import nested_lookup
-from appgoblin_play_scraper.utils.data_processors import unescape_text
+from appgoblin_play_scraper.utils.data_processors import (
+    normalize_video_url,
+    unescape_text,
+)
 
 
 class ElementSpec:
@@ -207,7 +210,7 @@ class ElementSpecs:
             lambda container: [item[3][2] for item in container] if container else [],
             [],
         ),
-        "video": ElementSpec(5, [1, 2, 100, 0, 0, 3, 2]),
+        "video": ElementSpec(5, [1, 2, 100, 0, 0, 3, 2], normalize_video_url),
         "videoImage": ElementSpec(5, [1, 2, 100, 1, 0, 3, 2]),
         "previewVideo": ElementSpec(5, [1, 2, 100, 1, 2, 0, 2]),
         "contentRating": ElementSpec(5, [1, 2, 9, 0]),
@@ -286,7 +289,7 @@ class ElementSpecs:
         ),
         "free": ElementSpec(None, [2, 57, 0, 0, 0, 0, 1, 0, 0], lambda s: s == 0),
         "currency": ElementSpec(None, [2, 57, 0, 0, 0, 0, 1, 0, 1]),
-        "video": ElementSpec(None, [2, 100, 0, 0, 3, 2]),
+        "video": ElementSpec(None, [2, 100, 0, 0, 3, 2], normalize_video_url),
         "videoImage": ElementSpec(None, [2, 100, 1, 0, 3, 2]),
         "description": ElementSpec(None, [2, 72, 0, 1], unescape_text),
         "descriptionHTML": ElementSpec(None, [2, 72, 0, 1]),
@@ -308,7 +311,7 @@ class ElementSpecs:
         ),
         "free": ElementSpec(None, [0, 8, 1, 0, 0], lambda s: s == 0),
         "currency": ElementSpec(None, [0, 8, 1, 0, 1]),
-        "video": ElementSpec(None, [0, 12, 0, 0, 3, 2]),
+        "video": ElementSpec(None, [0, 12, 0, 0, 3, 2], normalize_video_url),
         "videoImage": ElementSpec(None, [0, 12, 0, 3, 3, 2]),
         "description": ElementSpec(None, [0, 13, 1], unescape_text),
         "descriptionHTML": ElementSpec(None, [0, 13, 1]),

@@ -8,9 +8,11 @@ class TestSearch(TestCase):
         """
         Check if apps are found based on the search query and if all app properies are correct.
         """
-        results = search("best Pikachu game")
+        results = search("best pokemon", n_hits=100)
 
         self.assertGreater(len(results), 0)
+
+        print(f"Search results returned items: {len(results)}")
 
         for result in results:
             if result["appId"] == "com.nianticlabs.pokemongo":

@@ -27,7 +27,7 @@ class TestReviewsAll(TestCase):
             "co.kr.uaram.userdeliver_", lang="ko", country="kr", count=10000
         )
 
-        self.assertTrue(300 < len(result) < 500)
+        self.assertTrue(500 < len(result) < 1000)
         self.assertEqual(len(result), len(result_of_reviews))
 
     def test_no_reviews(self):

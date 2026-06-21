@@ -1,14 +1,18 @@
+import socket
 import time
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-from appgoblin_play_scraper.exceptions import ExtraHTTPError, NotFoundError
+from appgoblin_play_scraper.exceptions import ExtraHTTPError, NotFoundError, TimeoutError
 
+DEFAULT_TIMEOUT = 30
 MAX_RETRIES = 3
 RATE_LIMIT_DELAY = 5
 
 
 def _urlopen(obj, timeout: int | None = None):
+    if timeout is None:
+        timeout = DEFAULT_TIMEOUT
     try:
         resp = urlopen(obj, timeout=timeout)
     except HTTPError as e:
@@ -18,16 +22,24 @@ def _urlopen(obj, timeout: int | None = None):
             raise ExtraHTTPError(
                 "App not found. Status code {} returned.".format(e.code)
             )
+    except URLError as e:
+        if isinstance(e.reason, (socket.timeout, TimeoutError)):
+            raise TimeoutError(
+                "Request timed out after {} seconds.".format(timeout)
+            ) from e
+        raise
 
     return resp.read().decode("UTF-8")
 
 
-def post(url: str, data: str | bytes, headers: dict) -> str:
+def post(
+    url: str, data: str | bytes, headers: dict, timeout: int | None = None
+) -> str:
     last_exception = None
     rate_exceeded_count = 0
     for _ in range(MAX_RETRIES):
         try:
-            resp = _urlopen(Request(url, data=data, headers=headers))
+            resp = _urlopen(Request(url, data=data, headers=headers), timeout=timeout)
         except Exception as e:
             last_exception = e
             continue

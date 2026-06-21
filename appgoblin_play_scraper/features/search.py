@@ -9,7 +9,11 @@ from appgoblin_play_scraper.utils.request import get
 
 
 def search(
-    query: str, n_hits: int = 30, lang: str = "en", country: str = "us"
+    query: str,
+    n_hits: int = 30,
+    lang: str = "en",
+    country: str = "us",
+    timeout: int | None = None,
 ) -> list[dict]:
     if n_hits <= 0:
         return []
@@ -17,10 +21,10 @@ def search(
     query = quote(query)
     url = Formats.Searchresults.build(query=query, lang=lang, country=country)
     try:
-        dom = get(url)
+        dom = get(url, timeout=timeout)
     except NotFoundError:
         url = Formats.Searchresults.fallback_build(query=query, lang=lang)
-        dom = get(url)
+        dom = get(url, timeout=timeout)
 
     matches = Regex.SCRIPT.findall(dom)  # take out script blocks from dom
 

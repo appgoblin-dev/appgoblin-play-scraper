@@ -41,6 +41,7 @@ def _fetch_review_items(
     filter_score_with: int | None,
     filter_device_with: int | None,
     pagination_token: str | None,
+    timeout: int | None = None,
 ):
     dom = post(
         url,
@@ -53,6 +54,7 @@ def _fetch_review_items(
             pagination_token,
         ),
         {"content-type": "application/x-www-form-urlencoded"},
+        timeout=timeout,
     )
     match = json.loads(Regex.REVIEWS.findall(dom)[0])
     try:
@@ -75,6 +77,7 @@ def reviews(
     filter_score_with: int | None = None,
     filter_device_with: int | None = None,
     continuation_token: _ContinuationToken | None = None,
+    timeout: int | None = None,
 ) -> tuple[list[dict], _ContinuationToken]:
     sort = sort.value
 
@@ -118,6 +121,7 @@ def reviews(
                 filter_score_with,
                 filter_device_with,
                 token,
+                timeout=timeout,
             )
         except Exception:
             token = None

@@ -6,11 +6,14 @@ from appgoblin_play_scraper.constants.request import Formats
 from appgoblin_play_scraper.utils.request import post
 
 
-def permissions(app_id: str, lang: str = "en", country: str = "us") -> dict[str, list]:
+def permissions(
+    app_id: str, lang: str = "en", country: str = "us", timeout: int | None = None
+) -> dict[str, list]:
     dom = post(
         Formats.Permissions.build(lang=lang, country=country),
         Formats.Permissions.build_body(app_id),
         {"content-type": "application/x-www-form-urlencoded"},
+        timeout=timeout,
     )
 
     matches = json.loads(Regex.PERMISSIONS.findall(dom)[0])

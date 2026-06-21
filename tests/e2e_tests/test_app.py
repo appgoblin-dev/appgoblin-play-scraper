@@ -64,11 +64,11 @@ class TestApp(TestCase):
         self.assertEqual("Simulation", result["categories"][0]["name"])
         self.assertEqual("GAME_SIMULATION", result["categories"][0]["id"])
         self.assertEqual(
-            "https://play-lh.googleusercontent.com/5nPD6fyJaa-EDLHdlBd9UsaAV8KkfrYvLB956eQsvIGNBWUrPeouYw8aa7kbCbY--6E",
+            "https://play-lh.googleusercontent.com/JnLkBEhZ7f-KguliQ6ChTE_jUuA_hrSu89kk0hFm-jPRtduvpzy05SHX4dIJwMY-SSXAl27WfWTJEKt1sC1OkQ",
             result["icon"],
         )
         self.assertEqual(
-            "https://play-lh.googleusercontent.com/HVaR15hCrhTFeouDgocBaxJViXHA7TQ_sQfAHmb_zPs54CZQqo3Xgn78NgdrgnrnwTE",
+            "https://play-lh.googleusercontent.com/Zd4ak5J5iS_juocNX4pShMYyZGCvgX8el-lWJqjGxIkK5FRUSNYbtyPlVM9hS088PQ3dVhE6GrErFMdAoDR5",
             result["headerImage"],
         )
         self.assertTrue(result["screenshots"])

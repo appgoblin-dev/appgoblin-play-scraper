@@ -14,6 +14,7 @@ def search(
     lang: str = "en",
     country: str = "us",
     timeout: int | None = None,
+    proxies: dict[str, str] | None = None,
 ) -> list[dict]:
     if n_hits <= 0:
         return []
@@ -21,10 +22,10 @@ def search(
     query = quote(query)
     url = Formats.Searchresults.build(query=query, lang=lang, country=country)
     try:
-        dom = get(url, timeout=timeout)
+        dom = get(url, timeout=timeout, proxies=proxies)
     except NotFoundError:
         url = Formats.Searchresults.fallback_build(query=query, lang=lang)
-        dom = get(url, timeout=timeout)
+        dom = get(url, timeout=timeout, proxies=proxies)
 
     matches = Regex.SCRIPT.findall(dom)  # take out script blocks from dom
 

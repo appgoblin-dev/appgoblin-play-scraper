@@ -1,20 +1,29 @@
 import socket
 import time
 from urllib.error import HTTPError, URLError
-from urllib.request import Request, urlopen
+from urllib.request import ProxyHandler, Request, build_opener, urlopen
 
-from appgoblin_play_scraper.exceptions import ExtraHTTPError, NotFoundError, TimeoutError
+from appgoblin_play_scraper.exceptions import (
+    ExtraHTTPError,
+    NotFoundError,
+    TimeoutError,
+)
 
 DEFAULT_TIMEOUT = 30
 MAX_RETRIES = 3
 RATE_LIMIT_DELAY = 5
 
 
-def _urlopen(obj, timeout: int | None = None):
+def _urlopen(obj, timeout: int | None = None, proxies: dict[str, str] | None = None):
     if timeout is None:
         timeout = DEFAULT_TIMEOUT
     try:
-        resp = urlopen(obj, timeout=timeout)
+        if proxies:
+            proxy_handler = ProxyHandler(proxies)
+            opener = build_opener(proxy_handler)
+            resp = opener.open(obj, timeout=timeout)
+        else:
+            resp = urlopen(obj, timeout=timeout)
     except HTTPError as e:
         if e.code == 404:
             raise NotFoundError("App not found(404).")
@@ -33,13 +42,21 @@ def _urlopen(obj, timeout: int | None = None):
 
 
 def post(
-    url: str, data: str | bytes, headers: dict, timeout: int | None = None
+    url: str,
+    data: str | bytes,
+    headers: dict,
+    timeout: int | None = None,
+    proxies: dict[str, str] | None = None,
 ) -> str:
     last_exception = None
     rate_exceeded_count = 0
     for _ in range(MAX_RETRIES):
         try:
-            resp = _urlopen(Request(url, data=data, headers=headers), timeout=timeout)
+            resp = _urlopen(
+                Request(url, data=data, headers=headers),
+                timeout=timeout,
+                proxies=proxies,
+            )
         except Exception as e:
             last_exception = e
             continue
@@ -52,7 +69,9 @@ def post(
     raise last_exception
 
 
-def get(url: str, timeout: int | None = None) -> str:
+def get(
+    url: str, timeout: int | None = None, proxies: dict[str, str] | None = None
+) -> str:
     return _urlopen(
         Request(
             url,
@@ -61,4 +80,5 @@ def get(url: str, timeout: int | None = None) -> str:
             },
         ),
         timeout,
+        proxies=proxies,
     )

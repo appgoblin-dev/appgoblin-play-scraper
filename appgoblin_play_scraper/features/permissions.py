@@ -7,13 +7,18 @@ from appgoblin_play_scraper.utils.request import post
 
 
 def permissions(
-    app_id: str, lang: str = "en", country: str = "us", timeout: int | None = None
+    app_id: str,
+    lang: str = "en",
+    country: str = "us",
+    timeout: int | None = None,
+    proxies: dict[str, str] | None = None,
 ) -> dict[str, list]:
     dom = post(
         Formats.Permissions.build(lang=lang, country=country),
         Formats.Permissions.build_body(app_id),
         {"content-type": "application/x-www-form-urlencoded"},
         timeout=timeout,
+        proxies=proxies,
     )
 
     matches = json.loads(Regex.PERMISSIONS.findall(dom)[0])

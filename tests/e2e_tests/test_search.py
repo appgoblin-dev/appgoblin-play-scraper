@@ -26,7 +26,6 @@ class TestSearch(TestCase):
         self.assertTrue(1.0 < result["score"] < 5.0)
         self.assertEqual(0, result["price"])
         self.assertTrue(result["free"])
-
         self.assertEqual("USD", result["currency"])
         self.assertEqual("Scopely Explore, Inc.", result["developer"])
         self.assertEqual("Adventure", result["genre"])

@@ -27,7 +27,7 @@ class TestSearch(TestCase):
         self.assertEqual(0, result["price"])
         self.assertTrue(result["free"])
         self.assertEqual("USD", result["currency"])
-        self.assertEqual("Niantic, Inc.", result["developer"])
+        self.assertEqual("Scopely Explore, Inc.", result["developer"])
         self.assertEqual("Adventure", result["genre"])
         self.assertTrue("https://play-lh.googleusercontent.com" in result["icon"])
         self.assertTrue(result["screenshots"])

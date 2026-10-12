@@ -6,7 +6,6 @@ from appgoblin_play_scraper.constants.request import Formats
 from appgoblin_play_scraper.exceptions import NotFoundError
 from appgoblin_play_scraper.utils.request import get
 
-
 TV_PERMISSIONS = {
     "read TV channel/program information",
     "write TV channel/program information",

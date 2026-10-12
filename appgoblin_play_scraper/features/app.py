@@ -7,6 +7,22 @@ from appgoblin_play_scraper.exceptions import NotFoundError
 from appgoblin_play_scraper.utils.request import get
 
 
+TV_PERMISSIONS = {
+    "read TV channel/program information",
+    "write TV channel/program information",
+}
+
+
+def _has_tv_permission(value) -> bool:
+    if isinstance(value, str):
+        return value in TV_PERMISSIONS
+    if isinstance(value, dict):
+        return any(_has_tv_permission(item) for item in value.values())
+    if isinstance(value, list):
+        return any(_has_tv_permission(item) for item in value)
+    return False
+
+
 def app(
     app_id: str,
     lang: str = "en",
@@ -43,6 +59,9 @@ def parse_dom(dom: str, app_id: str, url: str) -> dict:
 
     for k, spec in ElementSpecs.Detail.items():
         result[k] = spec.extract_content(dataset)
+
+    if _has_tv_permission(dataset):
+        result["tv_supported"] = True
 
     result["appId"] = app_id
     result["url"] = url

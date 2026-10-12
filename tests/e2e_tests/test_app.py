@@ -133,3 +133,8 @@ class TestApp(TestCase):
         self.assertFalse(res["inAppProductPrice"])
 
         # TODO IAP, inAppProductPrice가 유효한 값인 경우에 대한 테스트
+
+    def test_tv_supported(self):
+        result = app("com.tubitv")
+
+        self.assertTrue(result["tv_supported"])

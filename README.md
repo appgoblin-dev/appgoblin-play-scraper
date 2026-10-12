@@ -143,6 +143,7 @@ Result of `print(result)`:
     ],
     "appId": "com.nianticlabs.pokemongo",
     "url": "https://play.google.com/store/apps/details?id=com.nianticlabs.pokemongo&hl=en&gl=us",
+    "tv_supported": False,
 }
 ```
 
